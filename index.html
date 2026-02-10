@@ -19,6 +19,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: background 0.5s ease;
+            overflow: hidden;
         }
 
         .container {
@@ -204,10 +205,177 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
         }
+
+        /* Main Menu Styles */
+        .main-menu {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+        }
+
+        .main-menu h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-menu button {
+            display: block;
+            width: 100%;
+            padding: 15px 30px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .main-menu button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .username-input {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .username-input input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* World Record Effect */
+        .world-record-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 215, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: worldRecordPulse 0.5s ease-in-out infinite;
+        }
+
+        .world-record-overlay.show {
+            display: flex;
+        }
+
+        .world-record-content {
+            text-align: center;
+            color: #fff;
+        }
+
+        .world-record-content h1 {
+            font-size: 100px;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.8),
+                         0 0 60px rgba(255, 0, 0, 0.6);
+            animation: worldRecordShake 0.3s ease-in-out infinite;
+        }
+
+        .world-record-content h2 {
+            font-size: 48px;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes worldRecordPulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes worldRecordShake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        /* Ultimate Clicker Badge */
+        .ultimate-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-left: 5px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .player-name {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Challenge notifications */
+        .challenge-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .challenge-notification.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
-    <div class="stats-panel">
+    <!-- Main Menu -->
+    <div class="main-menu" id="mainMenu">
+        <h1>🎮 Random Button Simulator</h1>
+        <button id="newGameBtn">🆕 New Game</button>
+        <button id="continueBtn" class="hidden">▶️ Continue</button>
+        
+        <div class="username-input" id="usernameInput">
+            <input type="text" id="usernameField" placeholder="Enter your username" maxlength="20">
+            <button id="startGameBtn">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Game UI (initially hidden) -->
+    <div id="gameUI" class="hidden">
+        <div class="stats-panel">
         <h2>🎮 Stats</h2>
         <div class="counter-display" id="counterDisplay">0</div>
         <div class="counter-label">Total Clicks</div>
@@ -230,6 +398,18 @@
     <div class="container">
         <button id="randomButton">Click Me!</button>
     </div>
+    </div>
+
+    <!-- World Record Overlay -->
+    <div class="world-record-overlay" id="worldRecordOverlay">
+        <div class="world-record-content">
+            <h1>🏆 WORLD RECORD!!! 🏆</h1>
+            <h2>You are The Ultimate Clicker!</h2>
+        </div>
+    </div>
+
+    <!-- Challenge Notification -->
+    <div class="challenge-notification" id="challengeNotification"></div>
 
     <script>
         const button = document.getElementById('randomButton');
@@ -239,6 +419,17 @@
         const comboLabel = document.getElementById('comboLabel');
         const comboProgress = document.getElementById('comboProgress');
         
+        // Main menu elements
+        const mainMenu = document.getElementById('mainMenu');
+        const gameUI = document.getElementById('gameUI');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const continueBtn = document.getElementById('continueBtn');
+        const usernameInput = document.getElementById('usernameInput');
+        const usernameField = document.getElementById('usernameField');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const worldRecordOverlay = document.getElementById('worldRecordOverlay');
+        const challengeNotification = document.getElementById('challengeNotification');
+        
         // Click counter and cookie management
         let clickCount = 0;
         let comboCount = 0;
@@ -246,6 +437,21 @@
         let comboTimeout = null;
         const COMBO_TIMEOUT_MS = 1000; // 1 second
         let lastClickTime = 0;
+        let username = '';
+        let previousHighScore = 0;
+        
+        // Challenge tracking
+        let challengesCompleted = {};
+        const challenges = [
+            { id: 'clicks_10', threshold: 10, message: '🎯 Challenge: First 10 clicks!' },
+            { id: 'clicks_50', threshold: 50, message: '🔥 Challenge: 50 clicks milestone!' },
+            { id: 'clicks_100', threshold: 100, message: '💯 Challenge: Century Club!' },
+            { id: 'clicks_500', threshold: 500, message: '⭐ Challenge: 500 clicks legend!' },
+            { id: 'clicks_1000', threshold: 1000, message: '🚀 Challenge: 1000 clicks master!' },
+            { id: 'combo_10', comboThreshold: 10, message: '⚡ Challenge: 10x combo!' },
+            { id: 'combo_25', comboThreshold: 25, message: '💥 Challenge: 25x mega combo!' },
+            { id: 'combo_50', comboThreshold: 50, message: '🌟 Challenge: 50x ultra combo!' }
+        ];
         
         // Sound effects (Web Audio API) - lazy initialization
         let audioContext = null;
@@ -280,6 +486,7 @@
             updateComboDisplay();
             showComboPopup();
             startComboTimer();
+            checkChallenges();
         }
         
         function resetCombo() {
@@ -343,6 +550,10 @@
         
         // Initialize counter from cookies
         function initCounter() {
+            const savedUsername = getCookie('username');
+            if (savedUsername) {
+                username = savedUsername;
+            }
             const savedCount = getCookie('clickCount');
             if (savedCount) {
                 clickCount = parseInt(savedCount, 10);
@@ -391,7 +602,11 @@
                 entryDiv.className = 'leaderboard-entry' + (index === 0 ? ' top' : '');
                 const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐';
                 const comboText = entry.combo ? ` (${entry.combo}x🔥)` : '';
-                entryDiv.innerHTML = `<span>${medal} ${entry.date}</span><span>${entry.score}${comboText}</span>`;
+                const badge = index === 0 ? '<span class="ultimate-badge">👑 The Ultimate Clicker</span>' : '';
+                const playerName = entry.username || entry.date;
+                const isCurrentPlayer = username && entry.username === username;
+                const nameClass = isCurrentPlayer ? 'player-name' : '';
+                entryDiv.innerHTML = `<span class="${nameClass}">${medal} ${playerName}${badge}</span><span>${entry.score}${comboText}</span>`;
                 leaderboardList.appendChild(entryDiv);
             });
         }
@@ -404,19 +619,29 @@
         function saveToLeaderboard(score) {
             let leaderboard = getLeaderboard();
             const today = new Date();
-            const dateStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+            const dateStr = today.toLocaleDateString('en-US', { 
+                month: '2-digit', 
+                day: '2-digit', 
+                year: 'numeric' 
+            });
             
-            // Check if there's already an entry for today
-            const todayIndex = leaderboard.findIndex(entry => entry.date === dateStr);
-            if (todayIndex !== -1) {
-                // Update today's score if the new score is higher
-                if (score > leaderboard[todayIndex].score) {
-                    leaderboard[todayIndex].score = score;
-                    leaderboard[todayIndex].combo = highestCombo;
+            // Check if there's already an entry for this user
+            const userIndex = leaderboard.findIndex(entry => entry.username === username);
+            if (userIndex !== -1) {
+                // Update user's score if the new score is higher
+                if (score > leaderboard[userIndex].score) {
+                    leaderboard[userIndex].score = score;
+                    leaderboard[userIndex].combo = highestCombo;
+                    leaderboard[userIndex].date = dateStr;
                 }
             } else {
                 // Add new entry
-                leaderboard.push({ date: dateStr, score: score, combo: highestCombo });
+                leaderboard.push({ 
+                    username: username, 
+                    score: score, 
+                    combo: highestCombo,
+                    date: dateStr
+                });
             }
             
             // Sort by score descending
@@ -427,11 +652,20 @@
             
             setCookie('leaderboard', JSON.stringify(leaderboard));
             updateLeaderboard();
+            
+            // Check for world record
+            if (leaderboard.length > 0 && leaderboard[0].username === username && score > previousHighScore) {
+                showWorldRecord();
+                previousHighScore = score;
+            }
         }
         
         function updateCounterDisplay() {
             counterDisplay.textContent = clickCount;
             setCookie('clickCount', clickCount);
+            if (username) {
+                setCookie('username', username);
+            }
             
             // Update leaderboard every 5 clicks to avoid performance issues
             // But also check if we beat the current high score
@@ -441,6 +675,8 @@
             if (clickCount % 5 === 0 || clickCount > currentHighScore) {
                 saveToLeaderboard(clickCount);
             }
+            
+            checkChallenges();
         }
         
         function resetCounter() {
@@ -491,7 +727,12 @@
             makeButtonInvisible,
             changeButtonShape,
             rainbowEffect,
-            explosionEffect
+            explosionEffect,
+            flashScreen,
+            rotateScreen,
+            growButton,
+            shrinkButton,
+            glitchEffect
         ];
 
         // Array of random messages
@@ -740,8 +981,232 @@
             }
         }
         
+        function flashScreen() {
+            const flash = document.createElement('div');
+            flash.style.position = 'fixed';
+            flash.style.top = '0';
+            flash.style.left = '0';
+            flash.style.width = '100%';
+            flash.style.height = '100%';
+            flash.style.backgroundColor = 'white';
+            flash.style.opacity = '0.8';
+            flash.style.zIndex = '9998';
+            flash.style.pointerEvents = 'none';
+            document.body.appendChild(flash);
+            
+            setTimeout(() => flash.remove(), 200);
+        }
+        
+        function rotateScreen() {
+            const container = document.querySelector('.container');
+            container.style.animation = 'spin 2s ease';
+            setTimeout(() => {
+                container.style.animation = '';
+            }, 2000);
+        }
+        
+        function growButton() {
+            button.style.transition = 'all 1s ease';
+            button.style.transform = 'scale(2)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 1000);
+        }
+        
+        function shrinkButton() {
+            button.style.transition = 'all 1s ease';
+            button.style.transform = 'scale(0.5)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 1000);
+        }
+        
+        function glitchEffect() {
+            const originalText = button.textContent;
+            const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            let iterations = 0;
+            const maxIterations = 10;
+            
+            const glitchInterval = setInterval(() => {
+                button.textContent = '';
+                for (let i = 0; i < originalText.length; i++) {
+                    button.textContent += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                }
+                iterations++;
+                
+                if (iterations >= maxIterations) {
+                    clearInterval(glitchInterval);
+                    button.textContent = originalText;
+                }
+            }, 100);
+        }
+        
         // Initialize on page load
         initCounter();
+        
+        // Main Menu Functions
+        function initMainMenu() {
+            const savedUsername = getCookie('username');
+            const savedClickCount = getCookie('clickCount');
+            
+            if (savedUsername && savedClickCount) {
+                // Show continue button
+                continueBtn.classList.remove('hidden');
+                username = savedUsername;
+            }
+        }
+        
+        newGameBtn.addEventListener('click', () => {
+            usernameInput.style.display = 'block';
+            usernameField.focus();
+        });
+        
+        continueBtn.addEventListener('click', () => {
+            startGame();
+        });
+        
+        startGameBtn.addEventListener('click', () => {
+            const enteredUsername = usernameField.value.trim();
+            if (enteredUsername) {
+                username = enteredUsername;
+                setCookie('username', username);
+                clickCount = 0; // Reset for new game
+                resetCombo();
+                startGame();
+            } else {
+                alert('Please enter a username!');
+            }
+        });
+        
+        usernameField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                startGameBtn.click();
+            }
+        });
+        
+        function startGame() {
+            mainMenu.classList.add('hidden');
+            gameUI.classList.remove('hidden');
+            
+            // Initialize game state
+            const leaderboard = getLeaderboard();
+            previousHighScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
+            loadChallenges();
+            updateCounterDisplay();
+        }
+        
+        // World Record Effect
+        function showWorldRecord() {
+            worldRecordOverlay.classList.add('show');
+            
+            // Play celebration sound
+            playCelebrationSound();
+            
+            // Create confetti explosion
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => createConfetti(), i * 20);
+            }
+            
+            // Hide after 4 seconds
+            setTimeout(() => {
+                worldRecordOverlay.classList.remove('show');
+            }, 4000);
+        }
+        
+        function playCelebrationSound() {
+            const ctx = getAudioContext();
+            const notes = [523, 659, 784, 1047]; // C, E, G, C (major chord)
+            
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const oscillator = ctx.createOscillator();
+                    const gainNode = ctx.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = freq;
+                    
+                    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                    
+                    oscillator.start(ctx.currentTime);
+                    oscillator.stop(ctx.currentTime + 0.5);
+                }, index * 100);
+            });
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.top = '-10px';
+            confetti.style.zIndex = '9999';
+            confetti.style.borderRadius = '50%';
+            document.body.appendChild(confetti);
+            
+            const fallDuration = 3000 + Math.random() * 2000;
+            const swing = (Math.random() - 0.5) * 200;
+            
+            confetti.animate([
+                { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 1 },
+                { transform: `translateY(${window.innerHeight + 10}px) translateX(${swing}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: fallDuration,
+                easing: 'linear'
+            });
+            
+            setTimeout(() => confetti.remove(), fallDuration);
+        }
+        
+        // Challenge System
+        function checkChallenges() {
+            challenges.forEach(challenge => {
+                if (!challengesCompleted[challenge.id]) {
+                    let completed = false;
+                    
+                    if (challenge.threshold && clickCount >= challenge.threshold) {
+                        completed = true;
+                    } else if (challenge.comboThreshold && comboCount >= challenge.comboThreshold) {
+                        completed = true;
+                    }
+                    
+                    if (completed) {
+                        challengesCompleted[challenge.id] = true;
+                        saveChallenges();
+                        showChallengeNotification(challenge.message);
+                    }
+                }
+            });
+        }
+        
+        function showChallengeNotification(message) {
+            challengeNotification.textContent = message;
+            challengeNotification.classList.add('show');
+            
+            setTimeout(() => {
+                challengeNotification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function saveChallenges() {
+            setCookie('challenges', JSON.stringify(challengesCompleted));
+        }
+        
+        function loadChallenges() {
+            const savedChallenges = getCookie('challenges');
+            if (savedChallenges) {
+                challengesCompleted = JSON.parse(savedChallenges);
+            }
+        }
+        
+        // Initialize main menu
+        initMainMenu();
     </script>
 </body>
 </html>

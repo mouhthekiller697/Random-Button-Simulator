@@ -323,6 +323,7 @@
         function showComboPopup() {
             if (comboCount >= 5) {
                 const comboMessages = [
+                    'COMBO!',
                     '🔥 ON FIRE! 🔥',
                     '⚡ UNSTOPPABLE! ⚡',
                     '💥 MEGA COMBO! 💥',
@@ -331,7 +332,7 @@
                 ];
                 
                 const messageIndex = Math.min(Math.floor(comboCount / 10), comboMessages.length - 1);
-                comboDisplay.textContent = `${comboCount}x COMBO!`;
+                comboDisplay.textContent = `${comboCount}x ${comboMessages[messageIndex]}`;
                 comboDisplay.classList.add('show');
                 
                 setTimeout(() => {
@@ -344,12 +345,12 @@
         function initCounter() {
             const savedCount = getCookie('clickCount');
             if (savedCount) {
-                clickCount = parseInt(savedCount);
+                clickCount = parseInt(savedCount, 10);
                 updateCounterDisplay();
             }
             const savedHighestCombo = getCookie('highestCombo');
             if (savedHighestCombo) {
-                highestCombo = parseInt(savedHighestCombo);
+                highestCombo = parseInt(savedHighestCombo, 10);
                 updateComboDisplay();
             }
             updateLeaderboard();
@@ -403,7 +404,7 @@
         function saveToLeaderboard(score) {
             let leaderboard = getLeaderboard();
             const today = new Date();
-            const dateStr = `${today.getMonth() + 1}/${today.getDate()}`;
+            const dateStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
             
             // Check if there's already an entry for today
             const todayIndex = leaderboard.findIndex(entry => entry.date === dateStr);

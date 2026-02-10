@@ -188,12 +188,12 @@
                 const vy = Math.sin(angle) * velocity - 2; // Add upward bias
                 
                 let x = 0, y = 0, gravity = 0.1;
-                let vyy = vy;
+                let currentVy = vy;
                 
                 const animate = setInterval(() => {
-                    vyy += gravity;
+                    currentVy += gravity;
                     x += vx;
-                    y += vyy;
+                    y += currentVy;
                     particle.style.transform = `translate(${x * 8}px, ${y * 8}px) rotate(${x * 30}deg)`;
                     particle.style.opacity = parseFloat(particle.style.opacity || 1) - 0.02;
                     
@@ -324,13 +324,17 @@
             const emojis = ['🎉', '⭐', '💫', '✨', '🌟', '💥', '🎊', '🎈', '🎆', '🎇', '🔥', '💖', '💜', '💙', '💚', '🧡', '❤️', '🌈', '🦄', '🎨'];
             const particles = 25;
             
+            const buttonRect = button.getBoundingClientRect();
+            const centerX = buttonRect.left + buttonRect.width / 2;
+            const centerY = buttonRect.top + buttonRect.height / 2;
+            
             for (let i = 0; i < particles; i++) {
                 const particle = document.createElement('div');
                 particle.style.position = 'fixed';
                 particle.style.fontSize = '24px';
                 particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                particle.style.left = button.offsetLeft + button.offsetWidth / 2 + 'px';
-                particle.style.top = button.offsetTop + button.offsetHeight / 2 + 'px';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
                 particle.style.pointerEvents = 'none';
                 particle.style.zIndex = '999';
                 document.body.appendChild(particle);

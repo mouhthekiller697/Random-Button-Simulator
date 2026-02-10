@@ -213,6 +213,18 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             max-width: 500px;
+            animation: menuFadeIn 0.8s ease-out;
+        }
+
+        @keyframes menuFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .main-menu h1 {
@@ -222,6 +234,21 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: titleBounce 1s ease-out 0.3s both;
+        }
+
+        @keyframes titleBounce {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .main-menu button {
@@ -237,6 +264,30 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             transition: all 0.3s ease;
+            animation: buttonSlideIn 0.5s ease-out backwards;
+        }
+
+        .main-menu button:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .main-menu button:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .main-menu button:nth-child(4) {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes buttonSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .main-menu button:hover {
@@ -414,13 +465,13 @@
 
         .podium {
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 60px;
             height: 40px;
             background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            border-radius: 5px 5px 0 0;
+            border-radius: 0 0 5px 5px;
             display: none;
             align-items: center;
             justify-content: center;
@@ -616,6 +667,169 @@
         .close-settings:hover {
             opacity: 0.9;
         }
+
+        /* Mobile Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .main-menu {
+                padding: 30px 20px;
+                max-width: 90%;
+            }
+
+            .main-menu h1 {
+                font-size: 32px;
+            }
+
+            .main-menu button {
+                padding: 12px 20px;
+                font-size: 16px;
+                margin: 10px 0;
+            }
+
+            .stats-panel {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                left: auto;
+                padding: 15px;
+                min-width: 160px;
+                font-size: 14px;
+            }
+
+            .stats-panel h2 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .counter-display {
+                font-size: 36px;
+            }
+
+            .counter-label {
+                font-size: 12px;
+            }
+
+            .leaderboard-entry {
+                font-size: 12px;
+            }
+
+            .ladder-widget {
+                position: fixed;
+                left: 10px;
+                top: auto;
+                bottom: 10px;
+                transform: none;
+                width: 120px;
+                height: 400px;
+                padding: 15px;
+            }
+
+            .random-button {
+                width: 200px;
+                height: 200px;
+                font-size: 24px;
+            }
+
+            .counter {
+                font-size: 72px;
+            }
+
+            .combo-container {
+                font-size: 18px;
+            }
+
+            .settings-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .settings-modal {
+                width: 90%;
+                max-width: none;
+                padding: 20px;
+            }
+
+            .settings-modal h2 {
+                font-size: 20px;
+            }
+
+            .customization-section h3 {
+                font-size: 16px;
+            }
+
+            .customization-grid {
+                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+                gap: 8px;
+            }
+
+            .customization-option {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .main-menu h1 {
+                font-size: 28px;
+            }
+
+            .stats-panel {
+                min-width: 140px;
+                padding: 12px;
+            }
+
+            .counter-display {
+                font-size: 28px;
+            }
+
+            .ladder-widget {
+                width: 100px;
+                height: 350px;
+                padding: 10px;
+            }
+
+            .random-button {
+                width: 180px;
+                height: 180px;
+                font-size: 20px;
+            }
+
+            .counter {
+                font-size: 60px;
+            }
+
+            .world-record-overlay h1 {
+                font-size: 32px;
+            }
+
+            .world-record-overlay p {
+                font-size: 18px;
+            }
+        }
+
+        /* Landscape mode adjustments for mobile */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .ladder-widget {
+                height: 80vh;
+            }
+
+            .stats-panel {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .random-button {
+                width: 150px;
+                height: 150px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -771,7 +985,6 @@
         const COMBO_TIMEOUT_MS = 1000; // 1 second
         let lastClickTime = 0;
         let username = '';
-        let previousHighScore = 0;
         let previousPosition = -1;
         
         // Challenge tracking
@@ -1045,11 +1258,13 @@
                 showPositionChangeNotification(previousPosition, newPosition);
             }
             
-            // Check for world record - user achieved a new highest score
-            const highestScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
-            if (score > previousHighScore && score >= highestScore) {
+            // Check for world record - user surpassed someone else to reach #1
+            const highestPlayer = leaderboard.length > 0 ? leaderboard[0].username : null;
+            const wasNotFirst = previousPosition !== 1;
+            const isNowFirst = newPosition === 1;
+            
+            if (isNowFirst && wasNotFirst && highestPlayer === username) {
                 showWorldRecord();
-                previousHighScore = score;
             }
         }
         
@@ -1537,7 +1752,6 @@
             
             // Initialize game state
             const leaderboard = getLeaderboard();
-            previousHighScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
             previousPosition = getCurrentPosition(leaderboard);
             loadChallenges();
             updateCounterDisplay();
@@ -1691,27 +1905,29 @@
             climberName.textContent = username;
             
             if (position === -1 || totalPlayers === 0) {
-                // New player, start from ground
+                // New player, start from ground (bottom)
                 climber.style.bottom = '0px';
                 podium.classList.remove('show');
             } else if (position === 1) {
-                // First place, show podium
-                climber.style.bottom = '420px';
+                // First place, show podium at top
+                climber.style.bottom = '460px';
                 podium.classList.add('show');
             } else {
                 // Calculate position on ladder
-                // Position 2 starts at rung 1 (45px), position 10 at rung 9 (405px)
+                // Position 2 starts high, position 10 at bottom
                 const rungHeight = 45;
                 const maxPosition = Math.min(totalPlayers, 10);
                 
                 if (maxPosition === 1) {
                     // Single player case - same as first place
-                    climber.style.bottom = '420px';
+                    climber.style.bottom = '460px';
                     podium.classList.add('show');
                 } else {
+                    // Position 2 should be near top, position 10 near bottom
+                    // Higher positions = higher on screen = larger bottom value
                     const ladderHeight = (maxPosition - 1) * rungHeight;
-                    const normalizedPosition = (maxPosition - position) / (maxPosition - 1);
-                    const bottom = normalizedPosition * ladderHeight;
+                    const normalizedPosition = (position - 2) / (maxPosition - 1);
+                    const bottom = ladderHeight - (normalizedPosition * ladderHeight);
                     
                     climber.style.bottom = Math.max(0, bottom) + 'px';
                     podium.classList.remove('show');

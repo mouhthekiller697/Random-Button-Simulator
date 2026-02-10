@@ -630,7 +630,24 @@
                     localStorage.setItem('leaderboard', leaderboardData);
                 }
             }
-            return leaderboardData ? JSON.parse(leaderboardData) : [];
+            
+            let leaderboard = leaderboardData ? JSON.parse(leaderboardData) : [];
+            
+            // Migrate old date-based entries to username-based entries
+            leaderboard = leaderboard.map(entry => {
+                if (!entry.username && entry.date) {
+                    // Legacy entry - convert date to username
+                    entry.username = 'Player-' + entry.date;
+                }
+                // Normalize dates to MM/DD/YYYY format
+                if (entry.date && entry.date.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                    const parts = entry.date.split('/');
+                    entry.date = parts.map((part, i) => i < 2 ? part.padStart(2, '0') : part).join('/');
+                }
+                return entry;
+            });
+            
+            return leaderboard;
         }
         
         function saveToLeaderboard(score) {
@@ -677,12 +694,13 @@
             
             // Check for position change
             const newPosition = getCurrentPosition(leaderboard);
-            if (previousPosition !== -1 && newPosition !== previousPosition && newPosition !== -1) {
+            if (shouldNotifyPositionChange(previousPosition, newPosition)) {
                 showPositionChangeNotification(previousPosition, newPosition);
             }
             
-            // Check for world record
-            if (leaderboard.length > 0 && leaderboard[0].username === username && score > previousHighScore) {
+            // Check for world record - user achieved the highest score
+            const highestScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
+            if (score >= highestScore && score > previousHighScore) {
                 showWorldRecord();
                 previousHighScore = score;
             }
@@ -694,12 +712,16 @@
             return index === -1 ? -1 : index + 1;
         }
         
+        function shouldNotifyPositionChange(oldPos, newPos) {
+            return oldPos !== -1 && newPos !== oldPos && newPos !== -1;
+        }
+        
         function checkPositionChange() {
             if (!username) return;
             const leaderboard = getLeaderboard();
             const newPosition = getCurrentPosition(leaderboard);
             
-            if (previousPosition !== -1 && newPosition !== previousPosition && newPosition !== -1) {
+            if (shouldNotifyPositionChange(previousPosition, newPosition)) {
                 showPositionChangeNotification(previousPosition, newPosition);
             }
             previousPosition = newPosition;
@@ -737,9 +759,6 @@
         function updateCounterDisplay() {
             counterDisplay.textContent = clickCount;
             setCookie('clickCount', clickCount);
-            if (username) {
-                setCookie('username', username);
-            }
             
             // Update leaderboard every 5 clicks to avoid performance issues
             // But also check if we beat the current high score
@@ -1123,7 +1142,7 @@
             const savedUsername = getCookie('username');
             const savedClickCount = getCookie('clickCount');
             
-            if (savedUsername && savedClickCount) {
+            if (savedUsername) {
                 // Show continue button
                 continueBtn.classList.remove('hidden');
                 username = savedUsername;
@@ -1146,6 +1165,8 @@
                 setCookie('username', username);
                 clickCount = 0; // Reset for new game
                 resetCombo();
+                challengesCompleted = {}; // Reset challenges for new player
+                saveChallenges();
                 startGame();
             } else {
                 alert('Please enter a username!');

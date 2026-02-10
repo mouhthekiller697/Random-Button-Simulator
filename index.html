@@ -439,6 +439,7 @@
         let lastClickTime = 0;
         let username = '';
         let previousHighScore = 0;
+        let previousPosition = -1;
         
         // Challenge tracking
         let challengesCompleted = {};
@@ -452,6 +453,14 @@
             { id: 'combo_25', comboThreshold: 25, message: '💥 Challenge: 25x mega combo!' },
             { id: 'combo_50', comboThreshold: 50, message: '🌟 Challenge: 50x ultra combo!' }
         ];
+        
+        // Storage event listener for live leaderboard updates
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'leaderboard' && e.newValue) {
+                updateLeaderboard();
+                checkPositionChange();
+            }
+        });
         
         // Sound effects (Web Audio API) - lazy initialization
         let audioContext = null;
@@ -612,7 +621,15 @@
         }
         
         function getLeaderboard() {
-            const leaderboardData = getCookie('leaderboard');
+            // Try localStorage first (for cross-tab sync), fallback to cookies
+            let leaderboardData = localStorage.getItem('leaderboard');
+            if (!leaderboardData) {
+                leaderboardData = getCookie('leaderboard');
+                if (leaderboardData) {
+                    // Migrate from cookie to localStorage
+                    localStorage.setItem('leaderboard', leaderboardData);
+                }
+            }
             return leaderboardData ? JSON.parse(leaderboardData) : [];
         }
         
@@ -624,6 +641,9 @@
                 day: '2-digit', 
                 year: 'numeric' 
             });
+            
+            // Store previous position before updating
+            previousPosition = getCurrentPosition(leaderboard);
             
             // Check if there's already an entry for this user
             const userIndex = leaderboard.findIndex(entry => entry.username === username);
@@ -650,13 +670,67 @@
             // Keep only top 10
             leaderboard = leaderboard.slice(0, 10);
             
+            // Save to both localStorage (for cross-tab sync) and cookies (for persistence)
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
             setCookie('leaderboard', JSON.stringify(leaderboard));
             updateLeaderboard();
+            
+            // Check for position change
+            const newPosition = getCurrentPosition(leaderboard);
+            if (previousPosition !== -1 && newPosition !== previousPosition && newPosition !== -1) {
+                showPositionChangeNotification(previousPosition, newPosition);
+            }
             
             // Check for world record
             if (leaderboard.length > 0 && leaderboard[0].username === username && score > previousHighScore) {
                 showWorldRecord();
                 previousHighScore = score;
+            }
+        }
+        
+        function getCurrentPosition(leaderboard) {
+            if (!username) return -1;
+            const index = leaderboard.findIndex(entry => entry.username === username);
+            return index === -1 ? -1 : index + 1;
+        }
+        
+        function checkPositionChange() {
+            if (!username) return;
+            const leaderboard = getLeaderboard();
+            const newPosition = getCurrentPosition(leaderboard);
+            
+            if (previousPosition !== -1 && newPosition !== previousPosition && newPosition !== -1) {
+                showPositionChangeNotification(previousPosition, newPosition);
+            }
+            previousPosition = newPosition;
+        }
+        
+        function showPositionChangeNotification(oldPos, newPos) {
+            let message = '';
+            let color = '';
+            
+            if (newPos < oldPos) {
+                // Position improved
+                color = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+                const diff = oldPos - newPos;
+                message = `📈 You moved up ${diff} ${diff === 1 ? 'place' : 'places'}! Now #${newPos}!`;
+            } else if (newPos > oldPos) {
+                // Position worsened
+                color = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
+                const diff = newPos - oldPos;
+                message = `📉 You dropped ${diff} ${diff === 1 ? 'place' : 'places'}. Now #${newPos}`;
+            }
+            
+            if (message) {
+                challengeNotification.textContent = message;
+                challengeNotification.style.background = color;
+                challengeNotification.classList.add('show');
+                
+                setTimeout(() => {
+                    challengeNotification.classList.remove('show');
+                    // Reset to default color
+                    challengeNotification.style.background = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+                }, 3000);
             }
         }
         
@@ -1091,6 +1165,7 @@
             // Initialize game state
             const leaderboard = getLeaderboard();
             previousHighScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
+            previousPosition = getCurrentPosition(leaderboard);
             loadChallenges();
             updateCounterDisplay();
         }

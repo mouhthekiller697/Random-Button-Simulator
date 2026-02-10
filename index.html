@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Button</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: background 0.5s ease;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #randomButton {
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #randomButton:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        #randomButton:active {
+            transform: translateY(-2px);
+        }
+
+        .message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                top: -100px;
+                opacity: 0;
+            }
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-20px); }
+            75% { transform: translateX(20px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-50px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="randomButton">Click Me!</button>
+    </div>
+
+    <script>
+        const button = document.getElementById('randomButton');
+        const body = document.body;
+
+        // Array of random actions
+        const randomActions = [
+            changeButtonColor,
+            changeBackgroundColor,
+            changeButtonSize,
+            changeButtonText,
+            moveButton,
+            spinButton,
+            shakeButton,
+            bounceButton,
+            pulseButton,
+            showRandomMessage,
+            makeButtonInvisible,
+            changeButtonShape,
+            rainbowEffect,
+            explosionEffect
+        ];
+
+        // Array of random messages
+        const messages = [
+            "🎉 Surprise!",
+            "🌟 Magic happened!",
+            "🎨 Colors changed!",
+            "🚀 To infinity and beyond!",
+            "🎪 Random is fun!",
+            "🎲 Roll the dice!",
+            "🌈 Rainbow power!",
+            "⭐ You're a star!",
+            "🎯 Bullseye!",
+            "🔮 Crystal ball says... click again!",
+            "🎭 Drama mode activated!",
+            "🌺 Flower power!",
+            "🦄 Unicorn approved!",
+            "🎸 Rock on!",
+            "🍕 Pizza time!"
+        ];
+
+        // Array of button texts
+        const buttonTexts = [
+            "Click Me!",
+            "Do It Again!",
+            "One More Time!",
+            "Press Here!",
+            "Magic Button",
+            "Random Fun!",
+            "Try Me!",
+            "What's Next?",
+            "Surprise Me!",
+            "Go Crazy!"
+        ];
+
+        button.addEventListener('click', function(e) {
+            // Create emoji particles on every click
+            createEmojiParticles(e);
+            
+            // Pick a random action
+            const randomAction = randomActions[Math.floor(Math.random() * randomActions.length)];
+            randomAction();
+        });
+
+        function createEmojiParticles(e) {
+            const emojis = ['✨', '💫', '⭐', '🌟', '💥', '🎉', '🎊'];
+            const particleCount = 8;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.fontSize = '20px';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = e.clientX + 'px';
+                particle.style.top = e.clientY + 'px';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '999';
+                particle.style.userSelect = 'none';
+                document.body.appendChild(particle);
+                
+                const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.5;
+                const velocity = 2 + Math.random() * 2;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity - 2; // Add upward bias
+                
+                let x = 0, y = 0, gravity = 0.1;
+                let currentVy = vy;
+                
+                const animate = setInterval(() => {
+                    currentVy += gravity;
+                    x += vx;
+                    y += currentVy;
+                    particle.style.transform = `translate(${x * 8}px, ${y * 8}px) rotate(${x * 30}deg)`;
+                    particle.style.opacity = parseFloat(particle.style.opacity || 1) - 0.02;
+                    
+                    if (parseFloat(particle.style.opacity) <= 0) {
+                        clearInterval(animate);
+                        particle.remove();
+                    }
+                }, 20);
+            }
+        }
+
+        function changeButtonColor() {
+            const colors = [
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)',
+                'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)'
+            ];
+            button.style.background = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function changeBackgroundColor() {
+            const backgrounds = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)'
+            ];
+            body.style.background = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+        }
+
+        function changeButtonSize() {
+            const sizes = ['16px', '20px', '24px', '28px', '32px', '36px'];
+            const paddings = ['15px 30px', '20px 40px', '25px 50px', '30px 60px'];
+            button.style.fontSize = sizes[Math.floor(Math.random() * sizes.length)];
+            button.style.padding = paddings[Math.floor(Math.random() * paddings.length)];
+        }
+
+        function changeButtonText() {
+            button.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
+        }
+
+        function moveButton() {
+            const maxX = window.innerWidth - button.offsetWidth - 40;
+            const maxY = window.innerHeight - button.offsetHeight - 40;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            button.style.position = 'fixed';
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+            button.style.transition = 'all 0.5s ease';
+        }
+
+        function spinButton() {
+            button.style.animation = 'spin 1s ease';
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 1000);
+        }
+
+        function shakeButton() {
+            button.style.animation = 'shake 0.5s ease';
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 500);
+        }
+
+        function bounceButton() {
+            button.style.animation = 'bounce 0.8s ease';
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 800);
+        }
+
+        function pulseButton() {
+            button.style.animation = 'pulse 0.6s ease';
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 600);
+        }
+
+        function showRandomMessage() {
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.textContent = messages[Math.floor(Math.random() * messages.length)];
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.remove();
+            }, 3000);
+        }
+
+        function makeButtonInvisible() {
+            button.style.opacity = '0';
+            setTimeout(() => {
+                button.style.opacity = '1';
+                showRandomMessage();
+            }, 1000);
+        }
+
+        function changeButtonShape() {
+            const shapes = ['50px', '10px', '0px', '25px'];
+            button.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+        }
+
+        function rainbowEffect() {
+            let hue = 0;
+            const interval = setInterval(() => {
+                button.style.background = `hsl(${hue}, 100%, 60%)`;
+                hue += 10;
+                if (hue >= 360) {
+                    clearInterval(interval);
+                    changeButtonColor();
+                }
+            }, 50);
+        }
+
+        function explosionEffect() {
+            const emojis = ['🎉', '⭐', '💫', '✨', '🌟', '💥', '🎊', '🎈', '🎆', '🎇', '🔥', '💖', '💜', '💙', '💚', '🧡', '❤️', '🌈', '🦄', '🎨'];
+            const particles = 25;
+            
+            const buttonRect = button.getBoundingClientRect();
+            const centerX = buttonRect.left + buttonRect.width / 2;
+            const centerY = buttonRect.top + buttonRect.height / 2;
+            
+            for (let i = 0; i < particles; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.fontSize = '24px';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '999';
+                document.body.appendChild(particle);
+                
+                const angle = (Math.PI * 2 * i) / particles;
+                const velocity = 3 + Math.random() * 3;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                let x = 0, y = 0;
+                const animate = setInterval(() => {
+                    x += vx;
+                    y += vy;
+                    particle.style.transform = `translate(${x * 10}px, ${y * 10}px) rotate(${x * 20}deg)`;
+                    particle.style.opacity = parseFloat(particle.style.opacity || 1) - 0.015;
+                    
+                    if (parseFloat(particle.style.opacity) <= 0) {
+                        clearInterval(animate);
+                        particle.remove();
+                    }
+                }, 20);
+            }
+        }
+    </script>
+</body>
+</html>

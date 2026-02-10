@@ -99,6 +99,41 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
+        .combo-display {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                         0 0 40px rgba(255, 100, 255, 0.8);
+            pointer-events: none;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .combo-display.show {
+            opacity: 1;
+        }
+
+        .combo-meter {
+            margin-top: 10px;
+            height: 8px;
+            background: rgba(200, 200, 200, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .combo-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            border-radius: 4px;
+            transition: width 0.05s linear;
+        }
+
         #randomButton {
             padding: 20px 40px;
             font-size: 24px;
@@ -177,13 +212,20 @@
         <div class="counter-display" id="counterDisplay">0</div>
         <div class="counter-label">Total Clicks</div>
         
+        <div class="combo-meter">
+            <div class="combo-progress" id="comboProgress"></div>
+        </div>
+        <div class="counter-label" id="comboLabel">Combo: 0x | Best: 0x</div>
+        
         <div class="leaderboard">
             <h3>🏆 Top Scores</h3>
             <div id="leaderboardList"></div>
         </div>
         
-        <button class="reset-btn" onclick="resetCounter()">Reset Counter</button>
+        <button class="reset-btn" id="resetBtn">Reset Counter</button>
     </div>
+
+    <div class="combo-display" id="comboDisplay"></div>
 
     <div class="container">
         <button id="randomButton">Click Me!</button>
@@ -193,9 +235,17 @@
         const button = document.getElementById('randomButton');
         const body = document.body;
         const counterDisplay = document.getElementById('counterDisplay');
+        const comboDisplay = document.getElementById('comboDisplay');
+        const comboLabel = document.getElementById('comboLabel');
+        const comboProgress = document.getElementById('comboProgress');
         
         // Click counter and cookie management
         let clickCount = 0;
+        let comboCount = 0;
+        let highestCombo = 0;
+        let comboTimeout = null;
+        const COMBO_TIMEOUT_MS = 1000; // 1 second
+        let lastClickTime = 0;
         
         // Sound effects (Web Audio API) - lazy initialization
         let audioContext = null;
@@ -220,12 +270,87 @@
             { freq: 1320, duration: 0.05, type: 'sine' }     // Chirp
         ];
         
+        // Combo management
+        function incrementCombo() {
+            comboCount++;
+            if (comboCount > highestCombo) {
+                highestCombo = comboCount;
+                setCookie('highestCombo', highestCombo);
+            }
+            updateComboDisplay();
+            showComboPopup();
+            startComboTimer();
+        }
+        
+        function resetCombo() {
+            comboCount = 0;
+            updateComboDisplay();
+            if (comboTimeout) {
+                clearTimeout(comboTimeout);
+                comboTimeout = null;
+            }
+        }
+        
+        function startComboTimer() {
+            if (comboTimeout) {
+                clearTimeout(comboTimeout);
+            }
+            
+            lastClickTime = Date.now();
+            
+            // Update progress bar
+            const updateProgress = () => {
+                const elapsed = Date.now() - lastClickTime;
+                const remaining = Math.max(0, COMBO_TIMEOUT_MS - elapsed);
+                const percentage = (remaining / COMBO_TIMEOUT_MS) * 100;
+                comboProgress.style.width = percentage + '%';
+                
+                if (remaining > 0 && comboCount > 0) {
+                    requestAnimationFrame(updateProgress);
+                }
+            };
+            updateProgress();
+            
+            comboTimeout = setTimeout(() => {
+                resetCombo();
+            }, COMBO_TIMEOUT_MS);
+        }
+        
+        function updateComboDisplay() {
+            comboLabel.textContent = `Combo: ${comboCount}x | Best: ${highestCombo}x`;
+        }
+        
+        function showComboPopup() {
+            if (comboCount >= 5) {
+                const comboMessages = [
+                    '🔥 ON FIRE! 🔥',
+                    '⚡ UNSTOPPABLE! ⚡',
+                    '💥 MEGA COMBO! 💥',
+                    '🌟 AMAZING! 🌟',
+                    '🚀 INCREDIBLE! 🚀'
+                ];
+                
+                const messageIndex = Math.min(Math.floor(comboCount / 10), comboMessages.length - 1);
+                comboDisplay.textContent = `${comboCount}x COMBO!`;
+                comboDisplay.classList.add('show');
+                
+                setTimeout(() => {
+                    comboDisplay.classList.remove('show');
+                }, 800);
+            }
+        }
+        
         // Initialize counter from cookies
         function initCounter() {
             const savedCount = getCookie('clickCount');
             if (savedCount) {
                 clickCount = parseInt(savedCount);
                 updateCounterDisplay();
+            }
+            const savedHighestCombo = getCookie('highestCombo');
+            if (savedHighestCombo) {
+                highestCombo = parseInt(savedHighestCombo);
+                updateComboDisplay();
             }
             updateLeaderboard();
         }
@@ -235,7 +360,7 @@
             const date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+            document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
         }
         
         function getCookie(name) {
@@ -264,7 +389,8 @@
                 const entryDiv = document.createElement('div');
                 entryDiv.className = 'leaderboard-entry' + (index === 0 ? ' top' : '');
                 const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐';
-                entryDiv.innerHTML = `<span>${medal} ${entry.date}</span><span>${entry.score}</span>`;
+                const comboText = entry.combo ? ` (${entry.combo}x🔥)` : '';
+                entryDiv.innerHTML = `<span>${medal} ${entry.date}</span><span>${entry.score}${comboText}</span>`;
                 leaderboardList.appendChild(entryDiv);
             });
         }
@@ -276,18 +402,20 @@
         
         function saveToLeaderboard(score) {
             let leaderboard = getLeaderboard();
-            const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const today = new Date();
+            const dateStr = `${today.getMonth() + 1}/${today.getDate()}`;
             
             // Check if there's already an entry for today
-            const todayIndex = leaderboard.findIndex(entry => entry.date === today);
+            const todayIndex = leaderboard.findIndex(entry => entry.date === dateStr);
             if (todayIndex !== -1) {
                 // Update today's score if the new score is higher
                 if (score > leaderboard[todayIndex].score) {
                     leaderboard[todayIndex].score = score;
+                    leaderboard[todayIndex].combo = highestCombo;
                 }
             } else {
                 // Add new entry
-                leaderboard.push({ date: today, score: score });
+                leaderboard.push({ date: dateStr, score: score, combo: highestCombo });
             }
             
             // Sort by score descending
@@ -309,7 +437,7 @@
             const leaderboard = getLeaderboard();
             const currentHighScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
             
-            if (clickCount % 5 === 0 || clickCount === 0 || clickCount > currentHighScore) {
+            if (clickCount % 5 === 0 || clickCount > currentHighScore) {
                 saveToLeaderboard(clickCount);
             }
         }
@@ -318,11 +446,12 @@
             if (confirm('Are you sure you want to reset your counter? This will save your current score to the leaderboard first!')) {
                 saveToLeaderboard(clickCount);
                 clickCount = 0;
+                resetCombo();
                 updateCounterDisplay();
             }
         }
         
-        // Play random funny sound effect
+        // Play random funny sound effect with combo modifier
         function playRandomSound() {
             const sound = soundEffects[Math.floor(Math.random() * soundEffects.length)];
             const ctx = getAudioContext();
@@ -333,9 +462,13 @@
             gainNode.connect(ctx.destination);
             
             oscillator.type = sound.type;
-            oscillator.frequency.value = sound.freq;
+            // Increase frequency based on combo (up to 2x at 50+ combo)
+            const comboMultiplier = 1 + Math.min(comboCount / 50, 1);
+            oscillator.frequency.value = sound.freq * comboMultiplier;
             
-            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+            // Increase volume slightly with combo
+            const volume = Math.min(0.3 + (comboCount * 0.01), 0.5);
+            gainNode.gain.setValueAtTime(volume, ctx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + sound.duration);
             
             oscillator.start(ctx.currentTime);
@@ -393,12 +526,16 @@
             "Go Crazy!"
         ];
 
+        // Add event listener for reset button
+        document.getElementById('resetBtn').addEventListener('click', resetCounter);
+
         button.addEventListener('click', function(e) {
-            // Increment counter
+            // Increment counter and combo
             clickCount++;
+            incrementCombo();
             updateCounterDisplay();
             
-            // Play sound effect
+            // Play sound effect (modified by combo)
             playRandomSound();
             
             // Create emoji particles on every click

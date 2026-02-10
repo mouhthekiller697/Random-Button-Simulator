@@ -197,8 +197,16 @@
         // Click counter and cookie management
         let clickCount = 0;
         
-        // Sound effects (Web Audio API)
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // Sound effects (Web Audio API) - lazy initialization
+        let audioContext = null;
+        
+        // Initialize audio context on first interaction
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
         
         // Funny sound effects array
         const soundEffects = [
@@ -235,8 +243,8 @@
             const ca = document.cookie.split(';');
             for (let i = 0; i < ca.length; i++) {
                 let c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
             }
             return null;
         }
@@ -295,7 +303,15 @@
         function updateCounterDisplay() {
             counterDisplay.textContent = clickCount;
             setCookie('clickCount', clickCount);
-            saveToLeaderboard(clickCount);
+            
+            // Update leaderboard every 5 clicks to avoid performance issues
+            // But also check if we beat the current high score
+            const leaderboard = getLeaderboard();
+            const currentHighScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
+            
+            if (clickCount % 5 === 0 || clickCount === 0 || clickCount > currentHighScore) {
+                saveToLeaderboard(clickCount);
+            }
         }
         
         function resetCounter() {
@@ -309,20 +325,21 @@
         // Play random funny sound effect
         function playRandomSound() {
             const sound = soundEffects[Math.floor(Math.random() * soundEffects.length)];
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            const ctx = getAudioContext();
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
             
             oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            gainNode.connect(ctx.destination);
             
             oscillator.type = sound.type;
             oscillator.frequency.value = sound.freq;
             
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
+            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + sound.duration);
             
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + sound.duration);
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + sound.duration);
         }
 
         // Array of random actions

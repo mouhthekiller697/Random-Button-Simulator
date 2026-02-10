@@ -204,10 +204,459 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
         }
+
+        /* Main Menu Styles */
+        .main-menu {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+        }
+
+        .main-menu h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-menu button {
+            display: block;
+            width: 100%;
+            padding: 15px 30px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .main-menu button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .username-input {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .username-input input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* World Record Effect */
+        .world-record-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 215, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: worldRecordPulse 0.5s ease-in-out infinite;
+        }
+
+        .world-record-overlay.show {
+            display: flex;
+        }
+
+        .world-record-content {
+            text-align: center;
+            color: #fff;
+        }
+
+        .world-record-content h1 {
+            font-size: 100px;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.8),
+                         0 0 60px rgba(255, 0, 0, 0.6);
+            animation: worldRecordShake 0.3s ease-in-out infinite;
+        }
+
+        .world-record-content h2 {
+            font-size: 48px;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes worldRecordPulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes worldRecordShake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        /* Ultimate Clicker Badge */
+        .ultimate-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-left: 5px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .player-name {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Challenge notifications */
+        .challenge-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .challenge-notification.show {
+            opacity: 1;
+        }
+
+        /* Ladder Widget */
+        .ladder-widget {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .ladder-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ladder {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 100%;
+        }
+
+        .ladder-rail {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: #8B4513;
+            border-radius: 2px;
+        }
+
+        .ladder-rail.left {
+            left: 5px;
+        }
+
+        .ladder-rail.right {
+            right: 5px;
+        }
+
+        .ladder-rung {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #8B4513;
+            border-radius: 2px;
+        }
+
+        .podium {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 5px 5px 0 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .podium.show {
+            display: flex;
+        }
+
+        .climber {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: bottom 0.5s ease-out;
+            z-index: 10;
+        }
+
+        .climber-name {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #667eea;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .climber-figure {
+            width: 30px;
+            height: 40px;
+            position: relative;
+        }
+
+        .climber-head {
+            width: 20px;
+            height: 20px;
+            background: #ffdbac;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 5px;
+            border: 2px solid #333;
+        }
+
+        .climber-hat {
+            position: absolute;
+            top: -8px;
+            left: 3px;
+            font-size: 18px;
+        }
+
+        .climber-body {
+            width: 16px;
+            height: 18px;
+            position: absolute;
+            top: 20px;
+            left: 7px;
+            border-radius: 3px;
+        }
+
+        .climber-backpack {
+            position: absolute;
+            top: 21px;
+            right: 0;
+            font-size: 14px;
+        }
+
+        .climber-legs {
+            position: absolute;
+            bottom: 0;
+            left: 9px;
+            width: 12px;
+            height: 10px;
+            background: #4169E1;
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* Settings Button and Modal */
+        .settings-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .settings-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .settings-btn-game {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+        }
+
+        .settings-modal.show {
+            display: flex;
+        }
+
+        .settings-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .settings-content h2 {
+            margin: 0 0 20px 0;
+            color: #667eea;
+        }
+
+        .customization-section {
+            margin: 20px 0;
+        }
+
+        .customization-section h3 {
+            margin: 10px 0;
+            color: #764ba2;
+            font-size: 16px;
+        }
+
+        .customization-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .customization-option {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .customization-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .customization-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .close-settings {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .close-settings:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
-    <div class="stats-panel">
+    <!-- Main Menu -->
+    <div class="main-menu" id="mainMenu">
+        <h1>🎮 Random Button Simulator</h1>
+        <button id="newGameBtn">🆕 New Game</button>
+        <button id="continueBtn" class="hidden">▶️ Continue</button>
+        <button id="settingsMenuBtn" class="settings-btn">⚙️ Settings</button>
+        
+        <div class="username-input" id="usernameInput">
+            <input type="text" id="usernameField" placeholder="Enter your username" maxlength="20">
+            <button id="startGameBtn">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Game UI (initially hidden) -->
+    <div id="gameUI" class="hidden">
+        <!-- Ladder Widget -->
+        <div class="ladder-widget">
+            <div class="ladder-container">
+                <div class="ladder">
+                    <div class="ladder-rail left"></div>
+                    <div class="ladder-rail right"></div>
+                    <div id="ladderRungs"></div>
+                </div>
+                <div class="podium" id="podium">🏆</div>
+                <div class="climber" id="climber">
+                    <div class="climber-name" id="climberName"></div>
+                    <div class="climber-figure">
+                        <div class="climber-hat" id="climberHat"></div>
+                        <div class="climber-head"></div>
+                        <div class="climber-body" id="climberBody"></div>
+                        <div class="climber-backpack" id="climberBackpack"></div>
+                        <div class="climber-legs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-panel">
         <h2>🎮 Stats</h2>
         <div class="counter-display" id="counterDisplay">0</div>
         <div class="counter-label">Total Clicks</div>
@@ -230,6 +679,45 @@
     <div class="container">
         <button id="randomButton">Click Me!</button>
     </div>
+    
+    <!-- Settings Button in Game -->
+    <button id="settingsGameBtn" class="settings-btn settings-btn-game hidden">⚙️</button>
+    </div>
+
+    <!-- World Record Overlay -->
+    <div class="world-record-overlay" id="worldRecordOverlay">
+        <div class="world-record-content">
+            <h1>🏆 WORLD RECORD!!! 🏆</h1>
+            <h2>You are The Ultimate Clicker!</h2>
+        </div>
+    </div>
+
+    <!-- Challenge Notification -->
+    <div class="challenge-notification" id="challengeNotification"></div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <h2>⚙️ Customize Your Climber</h2>
+            
+            <div class="customization-section">
+                <h3>🎩 Hats</h3>
+                <div class="customization-options" id="hatOptions"></div>
+            </div>
+            
+            <div class="customization-section">
+                <h3>👕 Shirts</h3>
+                <div class="customization-options" id="shirtOptions"></div>
+            </div>
+            
+            <div class="customization-section">
+                <h3>🎒 Backpacks</h3>
+                <div class="customization-options" id="backpackOptions"></div>
+            </div>
+            
+            <button class="close-settings" id="closeSettings">Done</button>
+        </div>
+    </div>
 
     <script>
         const button = document.getElementById('randomButton');
@@ -239,6 +727,42 @@
         const comboLabel = document.getElementById('comboLabel');
         const comboProgress = document.getElementById('comboProgress');
         
+        // Main menu elements
+        const mainMenu = document.getElementById('mainMenu');
+        const gameUI = document.getElementById('gameUI');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const continueBtn = document.getElementById('continueBtn');
+        const usernameInput = document.getElementById('usernameInput');
+        const usernameField = document.getElementById('usernameField');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const worldRecordOverlay = document.getElementById('worldRecordOverlay');
+        const challengeNotification = document.getElementById('challengeNotification');
+        
+        // Ladder and customization elements
+        const climber = document.getElementById('climber');
+        const climberName = document.getElementById('climberName');
+        const climberHat = document.getElementById('climberHat');
+        const climberBody = document.getElementById('climberBody');
+        const climberBackpack = document.getElementById('climberBackpack');
+        const podium = document.getElementById('podium');
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsMenuBtn = document.getElementById('settingsMenuBtn');
+        const settingsGameBtn = document.getElementById('settingsGameBtn');
+        const closeSettings = document.getElementById('closeSettings');
+        
+        // Customization data
+        let customization = {
+            hat: '🎩',
+            shirt: '#FF6B6B',
+            backpack: '🎒'
+        };
+        
+        const customizationOptions = {
+            hats: ['', '🎩', '👑', '🎓', '⛑️', '🧢', '👒', '🎪', '🪖', '👷'],
+            shirts: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'],
+            backpacks: ['', '🎒', '🛡️', '⚔️', '🎸', '🏹', '🔧', '📚', '💼']
+        };
+        
         // Click counter and cookie management
         let clickCount = 0;
         let comboCount = 0;
@@ -246,6 +770,31 @@
         let comboTimeout = null;
         const COMBO_TIMEOUT_MS = 1000; // 1 second
         let lastClickTime = 0;
+        let username = '';
+        let previousHighScore = 0;
+        let previousPosition = -1;
+        
+        // Challenge tracking
+        let challengesCompleted = {};
+        const challenges = [
+            { id: 'clicks_10', threshold: 10, message: '🎯 Challenge: First 10 clicks!' },
+            { id: 'clicks_50', threshold: 50, message: '🔥 Challenge: 50 clicks milestone!' },
+            { id: 'clicks_100', threshold: 100, message: '💯 Challenge: Century Club!' },
+            { id: 'clicks_500', threshold: 500, message: '⭐ Challenge: 500 clicks legend!' },
+            { id: 'clicks_1000', threshold: 1000, message: '🚀 Challenge: 1000 clicks master!' },
+            { id: 'combo_10', comboThreshold: 10, message: '⚡ Challenge: 10x combo!' },
+            { id: 'combo_25', comboThreshold: 25, message: '💥 Challenge: 25x mega combo!' },
+            { id: 'combo_50', comboThreshold: 50, message: '🌟 Challenge: 50x ultra combo!' }
+        ];
+        
+        // Storage event listener for live leaderboard updates
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'leaderboard' && e.newValue) {
+                updateLeaderboard();
+                checkPositionChange();
+                updateLadderPosition();
+            }
+        });
         
         // Sound effects (Web Audio API) - lazy initialization
         let audioContext = null;
@@ -280,6 +829,7 @@
             updateComboDisplay();
             showComboPopup();
             startComboTimer();
+            checkChallenges();
         }
         
         function resetCombo() {
@@ -343,6 +893,10 @@
         
         // Initialize counter from cookies
         function initCounter() {
+            const savedUsername = getCookie('username');
+            if (savedUsername) {
+                username = savedUsername;
+            }
             const savedCount = getCookie('clickCount');
             if (savedCount) {
                 clickCount = parseInt(savedCount, 10);
@@ -391,32 +945,86 @@
                 entryDiv.className = 'leaderboard-entry' + (index === 0 ? ' top' : '');
                 const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐';
                 const comboText = entry.combo ? ` (${entry.combo}x🔥)` : '';
-                entryDiv.innerHTML = `<span>${medal} ${entry.date}</span><span>${entry.score}${comboText}</span>`;
+                const badge = index === 0 ? '<span class="ultimate-badge">👑 The Ultimate Clicker</span>' : '';
+                const playerName = entry.username || entry.date;
+                const isCurrentPlayer = username && entry.username === username;
+                const nameClass = isCurrentPlayer ? 'player-name' : '';
+                entryDiv.innerHTML = `<span class="${nameClass}">${medal} ${playerName}${badge}</span><span>${entry.score}${comboText}</span>`;
                 leaderboardList.appendChild(entryDiv);
             });
         }
         
         function getLeaderboard() {
-            const leaderboardData = getCookie('leaderboard');
-            return leaderboardData ? JSON.parse(leaderboardData) : [];
+            // Try localStorage first (for cross-tab sync), fallback to cookies
+            let leaderboardData = localStorage.getItem('leaderboard');
+            if (!leaderboardData) {
+                leaderboardData = getCookie('leaderboard');
+                if (leaderboardData) {
+                    // Migrate from cookie to localStorage
+                    localStorage.setItem('leaderboard', leaderboardData);
+                }
+            }
+            
+            let leaderboard = leaderboardData ? JSON.parse(leaderboardData) : [];
+            
+            // Check if migration is needed (only run once per session)
+            const needsMigration = leaderboard.some(entry => 
+                (!entry.username && entry.date) || 
+                (entry.date && !entry.date.match(/^\d{2}\/\d{2}\/\d{4}$/))
+            );
+            
+            if (needsMigration) {
+                // Migrate old date-based entries to username-based entries
+                leaderboard = leaderboard.map(entry => {
+                    if (!entry.username && entry.date) {
+                        // Legacy entry - convert date to username
+                        entry.username = 'Player-' + entry.date;
+                    }
+                    // Normalize dates to MM/DD/YYYY format
+                    if (entry.date && entry.date.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                        const parts = entry.date.split('/');
+                        entry.date = parts.map((part, i) => i < 2 ? part.padStart(2, '0') : part).join('/');
+                    }
+                    return entry;
+                });
+                
+                // Save migrated data
+                localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+                setCookie('leaderboard', JSON.stringify(leaderboard));
+            }
+            
+            return leaderboard;
         }
         
         function saveToLeaderboard(score) {
             let leaderboard = getLeaderboard();
             const today = new Date();
-            const dateStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+            const dateStr = today.toLocaleDateString('en-US', { 
+                month: '2-digit', 
+                day: '2-digit', 
+                year: 'numeric' 
+            });
             
-            // Check if there's already an entry for today
-            const todayIndex = leaderboard.findIndex(entry => entry.date === dateStr);
-            if (todayIndex !== -1) {
-                // Update today's score if the new score is higher
-                if (score > leaderboard[todayIndex].score) {
-                    leaderboard[todayIndex].score = score;
-                    leaderboard[todayIndex].combo = highestCombo;
+            // Store previous position before updating
+            previousPosition = getCurrentPosition(leaderboard);
+            
+            // Check if there's already an entry for this user
+            const userIndex = leaderboard.findIndex(entry => entry.username === username);
+            if (userIndex !== -1) {
+                // Update user's score if the new score is higher
+                if (score > leaderboard[userIndex].score) {
+                    leaderboard[userIndex].score = score;
+                    leaderboard[userIndex].combo = highestCombo;
+                    leaderboard[userIndex].date = dateStr;
                 }
             } else {
                 // Add new entry
-                leaderboard.push({ date: dateStr, score: score, combo: highestCombo });
+                leaderboard.push({ 
+                    username: username, 
+                    score: score, 
+                    combo: highestCombo,
+                    date: dateStr
+                });
             }
             
             // Sort by score descending
@@ -425,8 +1033,74 @@
             // Keep only top 10
             leaderboard = leaderboard.slice(0, 10);
             
+            // Save to both localStorage (for cross-tab sync) and cookies (for persistence)
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
             setCookie('leaderboard', JSON.stringify(leaderboard));
             updateLeaderboard();
+            updateLadderPosition();
+            
+            // Check for position change
+            const newPosition = getCurrentPosition(leaderboard);
+            if (shouldNotifyPositionChange(previousPosition, newPosition)) {
+                showPositionChangeNotification(previousPosition, newPosition);
+            }
+            
+            // Check for world record - user achieved a new highest score
+            const highestScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
+            if (score > previousHighScore && score >= highestScore) {
+                showWorldRecord();
+                previousHighScore = score;
+            }
+        }
+        
+        function getCurrentPosition(leaderboard) {
+            if (!username) return -1;
+            const index = leaderboard.findIndex(entry => entry.username === username);
+            return index === -1 ? -1 : index + 1;
+        }
+        
+        function shouldNotifyPositionChange(oldPos, newPos) {
+            return oldPos !== -1 && newPos !== oldPos && newPos !== -1;
+        }
+        
+        function checkPositionChange() {
+            if (!username) return;
+            const leaderboard = getLeaderboard();
+            const newPosition = getCurrentPosition(leaderboard);
+            
+            if (shouldNotifyPositionChange(previousPosition, newPosition)) {
+                showPositionChangeNotification(previousPosition, newPosition);
+            }
+            previousPosition = newPosition;
+        }
+        
+        function showPositionChangeNotification(oldPos, newPos) {
+            let message = '';
+            let color = '';
+            
+            if (newPos < oldPos) {
+                // Position improved
+                color = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+                const diff = oldPos - newPos;
+                message = `📈 You moved up ${diff} ${diff === 1 ? 'place' : 'places'}! Now #${newPos}!`;
+            } else if (newPos > oldPos) {
+                // Position worsened
+                color = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
+                const diff = newPos - oldPos;
+                message = `📉 You dropped ${diff} ${diff === 1 ? 'place' : 'places'}. Now #${newPos}`;
+            }
+            
+            if (message) {
+                challengeNotification.textContent = message;
+                challengeNotification.style.background = color;
+                challengeNotification.classList.add('show');
+                
+                setTimeout(() => {
+                    challengeNotification.classList.remove('show');
+                    // Reset to default color
+                    challengeNotification.style.background = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+                }, 3000);
+            }
         }
         
         function updateCounterDisplay() {
@@ -441,6 +1115,8 @@
             if (clickCount % 5 === 0 || clickCount > currentHighScore) {
                 saveToLeaderboard(clickCount);
             }
+            
+            checkChallenges();
         }
         
         function resetCounter() {
@@ -491,7 +1167,12 @@
             makeButtonInvisible,
             changeButtonShape,
             rainbowEffect,
-            explosionEffect
+            explosionEffect,
+            flashScreen,
+            rotateScreen,
+            growButton,
+            shrinkButton,
+            glitchEffect
         ];
 
         // Array of random messages
@@ -740,8 +1421,394 @@
             }
         }
         
+        function flashScreen() {
+            const flash = document.createElement('div');
+            flash.style.position = 'fixed';
+            flash.style.top = '0';
+            flash.style.left = '0';
+            flash.style.width = '100%';
+            flash.style.height = '100%';
+            flash.style.backgroundColor = 'white';
+            flash.style.opacity = '0.8';
+            flash.style.zIndex = '9998';
+            flash.style.pointerEvents = 'none';
+            document.body.appendChild(flash);
+            
+            setTimeout(() => flash.remove(), 200);
+        }
+        
+        function rotateScreen() {
+            const container = document.querySelector('.container');
+            container.style.animation = 'spin 2s ease';
+            setTimeout(() => {
+                container.style.animation = '';
+            }, 2000);
+        }
+        
+        function growButton() {
+            button.style.transition = 'all 1s ease';
+            button.style.transform = 'scale(2)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 1000);
+        }
+        
+        function shrinkButton() {
+            button.style.transition = 'all 1s ease';
+            button.style.transform = 'scale(0.5)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 1000);
+        }
+        
+        function glitchEffect() {
+            const originalText = button.textContent;
+            const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            let iterations = 0;
+            const maxIterations = 10;
+            
+            const glitchInterval = setInterval(() => {
+                button.textContent = '';
+                for (let i = 0; i < originalText.length; i++) {
+                    button.textContent += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                }
+                iterations++;
+                
+                if (iterations >= maxIterations) {
+                    clearInterval(glitchInterval);
+                    button.textContent = originalText;
+                }
+            }, 100);
+        }
+        
         // Initialize on page load
         initCounter();
+        
+        // Main Menu Functions
+        function initMainMenu() {
+            const savedUsername = getCookie('username');
+            const savedClickCount = getCookie('clickCount');
+            
+            if (savedUsername) {
+                // Show continue button
+                continueBtn.classList.remove('hidden');
+                username = savedUsername;
+            }
+        }
+        
+        newGameBtn.addEventListener('click', () => {
+            usernameInput.style.display = 'block';
+            usernameField.focus();
+        });
+        
+        continueBtn.addEventListener('click', () => {
+            startGame();
+        });
+        
+        startGameBtn.addEventListener('click', () => {
+            const enteredUsername = usernameField.value.trim();
+            if (enteredUsername) {
+                username = enteredUsername;
+                setCookie('username', username);
+                clickCount = 0; // Reset for new game
+                resetCombo();
+                // Only reset challenges if this is a brand new username
+                const savedChallenges = getCookie('challenges_' + username);
+                if (!savedChallenges) {
+                    challengesCompleted = {};
+                    saveChallenges();
+                }
+                startGame();
+            } else {
+                alert('Please enter a username!');
+            }
+        });
+        
+        usernameField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                startGameBtn.click();
+            }
+        });
+        
+        function startGame() {
+            mainMenu.classList.add('hidden');
+            gameUI.classList.remove('hidden');
+            settingsGameBtn.classList.remove('hidden');
+            
+            // Initialize game state
+            const leaderboard = getLeaderboard();
+            previousHighScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
+            previousPosition = getCurrentPosition(leaderboard);
+            loadChallenges();
+            updateCounterDisplay();
+            
+            // Initialize ladder
+            initLadder();
+            updateLadderPosition();
+        }
+        
+        // World Record Effect
+        function showWorldRecord() {
+            worldRecordOverlay.classList.add('show');
+            
+            // Play celebration sound
+            playCelebrationSound();
+            
+            // Create confetti explosion
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => createConfetti(), i * 20);
+            }
+            
+            // Hide after 4 seconds
+            setTimeout(() => {
+                worldRecordOverlay.classList.remove('show');
+            }, 4000);
+        }
+        
+        function playCelebrationSound() {
+            const ctx = getAudioContext();
+            const notes = [523, 659, 784, 1047]; // C, E, G, C (major chord)
+            
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const oscillator = ctx.createOscillator();
+                    const gainNode = ctx.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = freq;
+                    
+                    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                    
+                    oscillator.start(ctx.currentTime);
+                    oscillator.stop(ctx.currentTime + 0.5);
+                }, index * 100);
+            });
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.top = '-10px';
+            confetti.style.zIndex = '9999';
+            confetti.style.borderRadius = '50%';
+            document.body.appendChild(confetti);
+            
+            const fallDuration = 3000 + Math.random() * 2000;
+            const swing = (Math.random() - 0.5) * 200;
+            
+            confetti.animate([
+                { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 1 },
+                { transform: `translateY(${window.innerHeight + 10}px) translateX(${swing}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: fallDuration,
+                easing: 'linear'
+            });
+            
+            setTimeout(() => confetti.remove(), fallDuration);
+        }
+        
+        // Challenge System
+        function checkChallenges() {
+            challenges.forEach(challenge => {
+                if (!challengesCompleted[challenge.id]) {
+                    let completed = false;
+                    
+                    if (challenge.threshold && clickCount >= challenge.threshold) {
+                        completed = true;
+                    } else if (challenge.comboThreshold && comboCount >= challenge.comboThreshold) {
+                        completed = true;
+                    }
+                    
+                    if (completed) {
+                        challengesCompleted[challenge.id] = true;
+                        saveChallenges();
+                        showChallengeNotification(challenge.message);
+                    }
+                }
+            });
+        }
+        
+        function showChallengeNotification(message) {
+            challengeNotification.textContent = message;
+            challengeNotification.classList.add('show');
+            
+            setTimeout(() => {
+                challengeNotification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function saveChallenges() {
+            if (username) {
+                setCookie('challenges_' + username, JSON.stringify(challengesCompleted));
+            }
+        }
+        
+        function loadChallenges() {
+            if (username) {
+                const savedChallenges = getCookie('challenges_' + username);
+                if (savedChallenges) {
+                    challengesCompleted = JSON.parse(savedChallenges);
+                }
+            }
+        }
+        
+        // Initialize main menu
+        initMainMenu();
+        
+        // Ladder Widget Functions
+        function initLadder() {
+            // Create ladder rungs
+            const ladderRungs = document.getElementById('ladderRungs');
+            ladderRungs.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const rung = document.createElement('div');
+                rung.className = 'ladder-rung';
+                rung.style.bottom = (i * 45) + 'px';
+                ladderRungs.appendChild(rung);
+            }
+            
+            // Load customization
+            loadCustomization();
+            applyCustomization();
+        }
+        
+        function updateLadderPosition() {
+            if (!username) return;
+            
+            const leaderboard = getLeaderboard();
+            const position = getCurrentPosition(leaderboard);
+            const totalPlayers = leaderboard.length;
+            
+            climberName.textContent = username;
+            
+            if (position === -1 || totalPlayers === 0) {
+                // New player, start from ground
+                climber.style.bottom = '0px';
+                podium.classList.remove('show');
+            } else if (position === 1) {
+                // First place, show podium
+                climber.style.bottom = '420px';
+                podium.classList.add('show');
+            } else {
+                // Calculate position on ladder
+                // Position 2 starts at rung 1 (45px), position 10 at rung 9 (405px)
+                const rungHeight = 45;
+                const maxPosition = Math.min(totalPlayers, 10);
+                
+                if (maxPosition === 1) {
+                    // Single player case - same as first place
+                    climber.style.bottom = '420px';
+                    podium.classList.add('show');
+                } else {
+                    const ladderHeight = (maxPosition - 1) * rungHeight;
+                    const normalizedPosition = (maxPosition - position) / (maxPosition - 1);
+                    const bottom = normalizedPosition * ladderHeight;
+                    
+                    climber.style.bottom = Math.max(0, bottom) + 'px';
+                    podium.classList.remove('show');
+                }
+            }
+        }
+        
+        function loadCustomization() {
+            const saved = localStorage.getItem('customization');
+            if (saved) {
+                customization = JSON.parse(saved);
+            }
+        }
+        
+        function saveCustomization() {
+            localStorage.setItem('customization', JSON.stringify(customization));
+        }
+        
+        function applyCustomization() {
+            climberHat.textContent = customization.hat;
+            climberBody.style.background = customization.shirt;
+            climberBackpack.textContent = customization.backpack;
+        }
+        
+        function initCustomizationOptions() {
+            // Hats
+            const hatOptions = document.getElementById('hatOptions');
+            hatOptions.innerHTML = '';
+            customizationOptions.hats.forEach(hat => {
+                const option = document.createElement('div');
+                option.className = 'customization-option';
+                if (hat === customization.hat) option.classList.add('selected');
+                option.textContent = hat || 'None';
+                option.onclick = () => selectCustomization('hat', hat, option);
+                hatOptions.appendChild(option);
+            });
+            
+            // Shirts
+            const shirtOptions = document.getElementById('shirtOptions');
+            shirtOptions.innerHTML = '';
+            customizationOptions.shirts.forEach(color => {
+                const option = document.createElement('div');
+                option.className = 'customization-option';
+                if (color === customization.shirt) option.classList.add('selected');
+                option.style.background = color;
+                option.style.width = '40px';
+                option.style.height = '40px';
+                option.onclick = () => selectCustomization('shirt', color, option);
+                shirtOptions.appendChild(option);
+            });
+            
+            // Backpacks
+            const backpackOptions = document.getElementById('backpackOptions');
+            backpackOptions.innerHTML = '';
+            customizationOptions.backpacks.forEach(backpack => {
+                const option = document.createElement('div');
+                option.className = 'customization-option';
+                if (backpack === customization.backpack) option.classList.add('selected');
+                option.textContent = backpack || 'None';
+                option.onclick = () => selectCustomization('backpack', backpack, option);
+                backpackOptions.appendChild(option);
+            });
+        }
+        
+        function selectCustomization(type, value, element) {
+            customization[type] = value;
+            saveCustomization();
+            applyCustomization();
+            
+            // Update selected state
+            const parent = element.parentElement;
+            parent.querySelectorAll('.customization-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+        
+        function openSettings() {
+            initCustomizationOptions();
+            settingsModal.classList.add('show');
+        }
+        
+        function closeSettingsModal() {
+            settingsModal.classList.remove('show');
+        }
+        
+        // Settings event listeners
+        settingsMenuBtn.addEventListener('click', openSettings);
+        settingsGameBtn.addEventListener('click', openSettings);
+        closeSettings.addEventListener('click', closeSettingsModal);
+        
+        // Close modal when clicking outside
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                closeSettingsModal();
+            }
+        });
     </script>
 </body>
 </html>

@@ -358,6 +358,265 @@
         .challenge-notification.show {
             opacity: 1;
         }
+
+        /* Ladder Widget */
+        .ladder-widget {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .ladder-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ladder {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 100%;
+        }
+
+        .ladder-rail {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: #8B4513;
+            border-radius: 2px;
+        }
+
+        .ladder-rail.left {
+            left: 5px;
+        }
+
+        .ladder-rail.right {
+            right: 5px;
+        }
+
+        .ladder-rung {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #8B4513;
+            border-radius: 2px;
+        }
+
+        .podium {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 5px 5px 0 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .podium.show {
+            display: flex;
+        }
+
+        .climber {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: bottom 0.5s ease-out;
+            z-index: 10;
+        }
+
+        .climber-name {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #667eea;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .climber-figure {
+            width: 30px;
+            height: 40px;
+            position: relative;
+        }
+
+        .climber-head {
+            width: 20px;
+            height: 20px;
+            background: #ffdbac;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 5px;
+            border: 2px solid #333;
+        }
+
+        .climber-hat {
+            position: absolute;
+            top: -8px;
+            left: 3px;
+            font-size: 18px;
+        }
+
+        .climber-body {
+            width: 16px;
+            height: 18px;
+            position: absolute;
+            top: 20px;
+            left: 7px;
+            border-radius: 3px;
+        }
+
+        .climber-backpack {
+            position: absolute;
+            top: 21px;
+            right: 0;
+            font-size: 14px;
+        }
+
+        .climber-legs {
+            position: absolute;
+            bottom: 0;
+            left: 9px;
+            width: 12px;
+            height: 10px;
+            background: #4169E1;
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* Settings Button and Modal */
+        .settings-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .settings-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .settings-btn-game {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+        }
+
+        .settings-modal.show {
+            display: flex;
+        }
+
+        .settings-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .settings-content h2 {
+            margin: 0 0 20px 0;
+            color: #667eea;
+        }
+
+        .customization-section {
+            margin: 20px 0;
+        }
+
+        .customization-section h3 {
+            margin: 10px 0;
+            color: #764ba2;
+            font-size: 16px;
+        }
+
+        .customization-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .customization-option {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .customization-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .customization-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .close-settings {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .close-settings:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -366,6 +625,7 @@
         <h1>🎮 Random Button Simulator</h1>
         <button id="newGameBtn">🆕 New Game</button>
         <button id="continueBtn" class="hidden">▶️ Continue</button>
+        <button id="settingsMenuBtn" class="settings-btn">⚙️ Settings</button>
         
         <div class="username-input" id="usernameInput">
             <input type="text" id="usernameField" placeholder="Enter your username" maxlength="20">
@@ -375,6 +635,28 @@
 
     <!-- Game UI (initially hidden) -->
     <div id="gameUI" class="hidden">
+        <!-- Ladder Widget -->
+        <div class="ladder-widget">
+            <div class="ladder-container">
+                <div class="ladder">
+                    <div class="ladder-rail left"></div>
+                    <div class="ladder-rail right"></div>
+                    <div id="ladderRungs"></div>
+                </div>
+                <div class="podium" id="podium">🏆</div>
+                <div class="climber" id="climber">
+                    <div class="climber-name" id="climberName"></div>
+                    <div class="climber-figure">
+                        <div class="climber-hat" id="climberHat"></div>
+                        <div class="climber-head"></div>
+                        <div class="climber-body" id="climberBody"></div>
+                        <div class="climber-backpack" id="climberBackpack"></div>
+                        <div class="climber-legs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="stats-panel">
         <h2>🎮 Stats</h2>
         <div class="counter-display" id="counterDisplay">0</div>
@@ -398,6 +680,9 @@
     <div class="container">
         <button id="randomButton">Click Me!</button>
     </div>
+    
+    <!-- Settings Button in Game -->
+    <button id="settingsGameBtn" class="settings-btn settings-btn-game hidden">⚙️</button>
     </div>
 
     <!-- World Record Overlay -->
@@ -410,6 +695,30 @@
 
     <!-- Challenge Notification -->
     <div class="challenge-notification" id="challengeNotification"></div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <h2>⚙️ Customize Your Climber</h2>
+            
+            <div class="customization-section">
+                <h3>🎩 Hats</h3>
+                <div class="customization-options" id="hatOptions"></div>
+            </div>
+            
+            <div class="customization-section">
+                <h3>👕 Shirts</h3>
+                <div class="customization-options" id="shirtOptions"></div>
+            </div>
+            
+            <div class="customization-section">
+                <h3>🎒 Backpacks</h3>
+                <div class="customization-options" id="backpackOptions"></div>
+            </div>
+            
+            <button class="close-settings" id="closeSettings">Done</button>
+        </div>
+    </div>
 
     <script>
         const button = document.getElementById('randomButton');
@@ -429,6 +738,31 @@
         const startGameBtn = document.getElementById('startGameBtn');
         const worldRecordOverlay = document.getElementById('worldRecordOverlay');
         const challengeNotification = document.getElementById('challengeNotification');
+        
+        // Ladder and customization elements
+        const climber = document.getElementById('climber');
+        const climberName = document.getElementById('climberName');
+        const climberHat = document.getElementById('climberHat');
+        const climberBody = document.getElementById('climberBody');
+        const climberBackpack = document.getElementById('climberBackpack');
+        const podium = document.getElementById('podium');
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsMenuBtn = document.getElementById('settingsMenuBtn');
+        const settingsGameBtn = document.getElementById('settingsGameBtn');
+        const closeSettings = document.getElementById('closeSettings');
+        
+        // Customization data
+        let customization = {
+            hat: '🎩',
+            shirt: '#FF6B6B',
+            backpack: '🎒'
+        };
+        
+        const customizationOptions = {
+            hats: ['', '🎩', '👑', '🎓', '⛑️', '🧢', '👒', '🎪', '🪖', '👷'],
+            shirts: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'],
+            backpacks: ['', '🎒', '🛡️', '⚔️', '🎸', '🏹', '🔧', '📚', '💼']
+        };
         
         // Click counter and cookie management
         let clickCount = 0;
@@ -459,6 +793,7 @@
             if (e.key === 'leaderboard' && e.newValue) {
                 updateLeaderboard();
                 checkPositionChange();
+                updateLadderPosition();
             }
         });
         
@@ -691,6 +1026,7 @@
             localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
             setCookie('leaderboard', JSON.stringify(leaderboard));
             updateLeaderboard();
+            updateLadderPosition();
             
             // Check for position change
             const newPosition = getCurrentPosition(leaderboard);
@@ -1182,6 +1518,7 @@
         function startGame() {
             mainMenu.classList.add('hidden');
             gameUI.classList.remove('hidden');
+            settingsGameBtn.classList.remove('hidden');
             
             // Initialize game state
             const leaderboard = getLeaderboard();
@@ -1189,6 +1526,10 @@
             previousPosition = getCurrentPosition(leaderboard);
             loadChallenges();
             updateCounterDisplay();
+            
+            // Initialize ladder
+            initLadder();
+            updateLadderPosition();
         }
         
         // World Record Effect
@@ -1303,6 +1644,145 @@
         
         // Initialize main menu
         initMainMenu();
+        
+        // Ladder Widget Functions
+        function initLadder() {
+            // Create ladder rungs
+            const ladderRungs = document.getElementById('ladderRungs');
+            ladderRungs.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const rung = document.createElement('div');
+                rung.className = 'ladder-rung';
+                rung.style.bottom = (i * 45) + 'px';
+                ladderRungs.appendChild(rung);
+            }
+            
+            // Load customization
+            loadCustomization();
+            applyCustomization();
+        }
+        
+        function updateLadderPosition() {
+            if (!username) return;
+            
+            const leaderboard = getLeaderboard();
+            const position = getCurrentPosition(leaderboard);
+            const totalPlayers = leaderboard.length;
+            
+            climberName.textContent = username;
+            
+            if (position === -1 || totalPlayers === 0) {
+                // New player, start from ground
+                climber.style.bottom = '0px';
+                podium.classList.remove('show');
+            } else if (position === 1) {
+                // First place, show podium
+                climber.style.bottom = '420px';
+                podium.classList.add('show');
+            } else {
+                // Calculate position on ladder
+                // Position 2 starts at rung 1 (45px), position 10 at rung 9 (405px)
+                const rungHeight = 45;
+                const maxPosition = Math.min(totalPlayers, 10);
+                const ladderHeight = (maxPosition - 1) * rungHeight;
+                const normalizedPosition = (maxPosition - position) / (maxPosition - 1);
+                const bottom = normalizedPosition * ladderHeight;
+                
+                climber.style.bottom = Math.max(0, bottom) + 'px';
+                podium.classList.remove('show');
+            }
+        }
+        
+        function loadCustomization() {
+            const saved = localStorage.getItem('customization');
+            if (saved) {
+                customization = JSON.parse(saved);
+            }
+        }
+        
+        function saveCustomization() {
+            localStorage.setItem('customization', JSON.stringify(customization));
+        }
+        
+        function applyCustomization() {
+            climberHat.textContent = customization.hat;
+            climberBody.style.background = customization.shirt;
+            climberBackpack.textContent = customization.backpack;
+        }
+        
+        function initCustomizationOptions() {
+            // Hats
+            const hatOptions = document.getElementById('hatOptions');
+            hatOptions.innerHTML = '';
+            customizationOptions.hats.forEach(hat => {
+                const option = document.createElement('div');
+                option.className = 'customization-option';
+                if (hat === customization.hat) option.classList.add('selected');
+                option.textContent = hat || 'None';
+                option.onclick = () => selectCustomization('hat', hat, option);
+                hatOptions.appendChild(option);
+            });
+            
+            // Shirts
+            const shirtOptions = document.getElementById('shirtOptions');
+            shirtOptions.innerHTML = '';
+            customizationOptions.shirts.forEach(color => {
+                const option = document.createElement('div');
+                option.className = 'customization-option';
+                if (color === customization.shirt) option.classList.add('selected');
+                option.style.background = color;
+                option.style.width = '40px';
+                option.style.height = '40px';
+                option.onclick = () => selectCustomization('shirt', color, option);
+                shirtOptions.appendChild(option);
+            });
+            
+            // Backpacks
+            const backpackOptions = document.getElementById('backpackOptions');
+            backpackOptions.innerHTML = '';
+            customizationOptions.backpacks.forEach(backpack => {
+                const option = document.createElement('div');
+                option.className = 'customization-option';
+                if (backpack === customization.backpack) option.classList.add('selected');
+                option.textContent = backpack || 'None';
+                option.onclick = () => selectCustomization('backpack', backpack, option);
+                backpackOptions.appendChild(option);
+            });
+        }
+        
+        function selectCustomization(type, value, element) {
+            customization[type] = value;
+            saveCustomization();
+            applyCustomization();
+            
+            // Update selected state
+            const parent = element.parentElement;
+            parent.querySelectorAll('.customization-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+        
+        function openSettings() {
+            initCustomizationOptions();
+            settingsModal.classList.add('show');
+        }
+        
+        function closeSettingsModal() {
+            settingsModal.classList.remove('show');
+        }
+        
+        // Settings event listeners
+        settingsMenuBtn.addEventListener('click', openSettings);
+        settingsGameBtn.addEventListener('click', openSettings);
+        closeSettings.addEventListener('click', closeSettingsModal);
+        
+        // Close modal when clicking outside
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                closeSettingsModal();
+            }
+        });
     </script>
 </body>
 </html>

@@ -506,6 +506,24 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
+        .linux-badge {
+            position: absolute;
+            top: -25px;
+            right: -30px;
+            font-size: 16px;
+            animation: penguinWiggle 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes penguinWiggle {
+            0%, 100% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+
         .climber-figure {
             width: 30px;
             height: 40px;
@@ -859,6 +877,7 @@
                 <div class="podium" id="podium">🏆</div>
                 <div class="climber" id="climber">
                     <div class="climber-name" id="climberName"></div>
+                    <div class="linux-badge" id="linuxBadge" style="display: none;">🐧</div>
                     <div class="climber-figure">
                         <div class="climber-hat" id="climberHat"></div>
                         <div class="climber-head"></div>
@@ -958,11 +977,16 @@
         const climberHat = document.getElementById('climberHat');
         const climberBody = document.getElementById('climberBody');
         const climberBackpack = document.getElementById('climberBackpack');
+        const linuxBadge = document.getElementById('linuxBadge');
         const podium = document.getElementById('podium');
         const settingsModal = document.getElementById('settingsModal');
         const settingsMenuBtn = document.getElementById('settingsMenuBtn');
         const settingsGameBtn = document.getElementById('settingsGameBtn');
         const closeSettings = document.getElementById('closeSettings');
+        
+        // Detect Linux OS
+        const isLinux = navigator.userAgent.toLowerCase().indexOf('linux') > -1 && 
+                        navigator.userAgent.toLowerCase().indexOf('android') === -1;
         
         // Customization data
         let customization = {
@@ -1950,6 +1974,11 @@
             climberHat.textContent = customization.hat;
             climberBody.style.background = customization.shirt;
             climberBackpack.textContent = customization.backpack;
+            
+            // Show Linux badge for Linux users
+            if (isLinux) {
+                linuxBadge.style.display = 'block';
+            }
         }
         
         function initCustomizationOptions() {

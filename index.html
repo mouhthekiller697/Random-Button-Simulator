@@ -25,6 +25,80 @@
             text-align: center;
         }
 
+        .stats-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            z-index: 100;
+        }
+
+        .stats-panel h2 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .counter-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 10px 0;
+        }
+
+        .counter-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .leaderboard {
+            margin-top: 20px;
+        }
+
+        .leaderboard h3 {
+            font-size: 16px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .leaderboard-entry.top {
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .reset-btn {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
         #randomButton {
             padding: 20px 40px;
             font-size: 24px;
@@ -98,6 +172,19 @@
     </style>
 </head>
 <body>
+    <div class="stats-panel">
+        <h2>🎮 Stats</h2>
+        <div class="counter-display" id="counterDisplay">0</div>
+        <div class="counter-label">Total Clicks</div>
+        
+        <div class="leaderboard">
+            <h3>🏆 Top Scores</h3>
+            <div id="leaderboardList"></div>
+        </div>
+        
+        <button class="reset-btn" onclick="resetCounter()">Reset Counter</button>
+    </div>
+
     <div class="container">
         <button id="randomButton">Click Me!</button>
     </div>
@@ -105,6 +192,138 @@
     <script>
         const button = document.getElementById('randomButton');
         const body = document.body;
+        const counterDisplay = document.getElementById('counterDisplay');
+        
+        // Click counter and cookie management
+        let clickCount = 0;
+        
+        // Sound effects (Web Audio API)
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Funny sound effects array
+        const soundEffects = [
+            { freq: 440, duration: 0.1, type: 'sine' },      // Beep
+            { freq: 330, duration: 0.15, type: 'square' },   // Boop
+            { freq: 550, duration: 0.08, type: 'sawtooth' }, // Zap
+            { freq: 220, duration: 0.2, type: 'triangle' },  // Boing
+            { freq: 660, duration: 0.12, type: 'sine' },     // Ding
+            { freq: 880, duration: 0.1, type: 'square' },    // Ping
+            { freq: 165, duration: 0.25, type: 'sawtooth' }, // Womp
+            { freq: 1320, duration: 0.05, type: 'sine' }     // Chirp
+        ];
+        
+        // Initialize counter from cookies
+        function initCounter() {
+            const savedCount = getCookie('clickCount');
+            if (savedCount) {
+                clickCount = parseInt(savedCount);
+                updateCounterDisplay();
+            }
+            updateLeaderboard();
+        }
+        
+        // Cookie functions
+        function setCookie(name, value, days = 365) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+        
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        
+        // Leaderboard functions
+        function updateLeaderboard() {
+            let leaderboard = getLeaderboard();
+            const leaderboardList = document.getElementById('leaderboardList');
+            
+            if (leaderboard.length === 0) {
+                leaderboardList.innerHTML = '<div style="color: #999; font-size: 12px;">No scores yet!</div>';
+                return;
+            }
+            
+            leaderboardList.innerHTML = '';
+            leaderboard.slice(0, 5).forEach((entry, index) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'leaderboard-entry' + (index === 0 ? ' top' : '');
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐';
+                entryDiv.innerHTML = `<span>${medal} ${entry.date}</span><span>${entry.score}</span>`;
+                leaderboardList.appendChild(entryDiv);
+            });
+        }
+        
+        function getLeaderboard() {
+            const leaderboardData = getCookie('leaderboard');
+            return leaderboardData ? JSON.parse(leaderboardData) : [];
+        }
+        
+        function saveToLeaderboard(score) {
+            let leaderboard = getLeaderboard();
+            const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            
+            // Check if there's already an entry for today
+            const todayIndex = leaderboard.findIndex(entry => entry.date === today);
+            if (todayIndex !== -1) {
+                // Update today's score if the new score is higher
+                if (score > leaderboard[todayIndex].score) {
+                    leaderboard[todayIndex].score = score;
+                }
+            } else {
+                // Add new entry
+                leaderboard.push({ date: today, score: score });
+            }
+            
+            // Sort by score descending
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // Keep only top 10
+            leaderboard = leaderboard.slice(0, 10);
+            
+            setCookie('leaderboard', JSON.stringify(leaderboard));
+            updateLeaderboard();
+        }
+        
+        function updateCounterDisplay() {
+            counterDisplay.textContent = clickCount;
+            setCookie('clickCount', clickCount);
+            saveToLeaderboard(clickCount);
+        }
+        
+        function resetCounter() {
+            if (confirm('Are you sure you want to reset your counter? This will save your current score to the leaderboard first!')) {
+                saveToLeaderboard(clickCount);
+                clickCount = 0;
+                updateCounterDisplay();
+            }
+        }
+        
+        // Play random funny sound effect
+        function playRandomSound() {
+            const sound = soundEffects[Math.floor(Math.random() * soundEffects.length)];
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = sound.type;
+            oscillator.frequency.value = sound.freq;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + sound.duration);
+        }
 
         // Array of random actions
         const randomActions = [
@@ -158,6 +377,13 @@
         ];
 
         button.addEventListener('click', function(e) {
+            // Increment counter
+            clickCount++;
+            updateCounterDisplay();
+            
+            // Play sound effect
+            playRandomSound();
+            
             // Create emoji particles on every click
             createEmojiParticles(e);
             
@@ -358,6 +584,9 @@
                 }, 20);
             }
         }
+        
+        // Initialize on page load
+        initCounter();
     </script>
 </body>
 </html>

@@ -19,7 +19,6 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: background 0.5s ease;
-            overflow: hidden;
         }
 
         .container {
@@ -968,19 +967,31 @@
             
             let leaderboard = leaderboardData ? JSON.parse(leaderboardData) : [];
             
-            // Migrate old date-based entries to username-based entries
-            leaderboard = leaderboard.map(entry => {
-                if (!entry.username && entry.date) {
-                    // Legacy entry - convert date to username
-                    entry.username = 'Player-' + entry.date;
-                }
-                // Normalize dates to MM/DD/YYYY format
-                if (entry.date && entry.date.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-                    const parts = entry.date.split('/');
-                    entry.date = parts.map((part, i) => i < 2 ? part.padStart(2, '0') : part).join('/');
-                }
-                return entry;
-            });
+            // Check if migration is needed (only run once per session)
+            const needsMigration = leaderboard.some(entry => 
+                (!entry.username && entry.date) || 
+                (entry.date && !entry.date.match(/^\d{2}\/\d{2}\/\d{4}$/))
+            );
+            
+            if (needsMigration) {
+                // Migrate old date-based entries to username-based entries
+                leaderboard = leaderboard.map(entry => {
+                    if (!entry.username && entry.date) {
+                        // Legacy entry - convert date to username
+                        entry.username = 'Player-' + entry.date;
+                    }
+                    // Normalize dates to MM/DD/YYYY format
+                    if (entry.date && entry.date.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                        const parts = entry.date.split('/');
+                        entry.date = parts.map((part, i) => i < 2 ? part.padStart(2, '0') : part).join('/');
+                    }
+                    return entry;
+                });
+                
+                // Save migrated data
+                localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+                setCookie('leaderboard', JSON.stringify(leaderboard));
+            }
             
             return leaderboard;
         }
@@ -1034,9 +1045,9 @@
                 showPositionChangeNotification(previousPosition, newPosition);
             }
             
-            // Check for world record - user achieved the highest score
+            // Check for world record - user achieved a new highest score
             const highestScore = leaderboard.length > 0 ? leaderboard[0].score : 0;
-            if (score >= highestScore && score > previousHighScore) {
+            if (score > previousHighScore && score >= highestScore) {
                 showWorldRecord();
                 previousHighScore = score;
             }
@@ -1501,8 +1512,12 @@
                 setCookie('username', username);
                 clickCount = 0; // Reset for new game
                 resetCombo();
-                challengesCompleted = {}; // Reset challenges for new player
-                saveChallenges();
+                // Only reset challenges if this is a brand new username
+                const savedChallenges = getCookie('challenges_' + username);
+                if (!savedChallenges) {
+                    challengesCompleted = {};
+                    saveChallenges();
+                }
                 startGame();
             } else {
                 alert('Please enter a username!');
@@ -1632,13 +1647,17 @@
         }
         
         function saveChallenges() {
-            setCookie('challenges', JSON.stringify(challengesCompleted));
+            if (username) {
+                setCookie('challenges_' + username, JSON.stringify(challengesCompleted));
+            }
         }
         
         function loadChallenges() {
-            const savedChallenges = getCookie('challenges');
-            if (savedChallenges) {
-                challengesCompleted = JSON.parse(savedChallenges);
+            if (username) {
+                const savedChallenges = getCookie('challenges_' + username);
+                if (savedChallenges) {
+                    challengesCompleted = JSON.parse(savedChallenges);
+                }
             }
         }
         
@@ -1684,12 +1703,19 @@
                 // Position 2 starts at rung 1 (45px), position 10 at rung 9 (405px)
                 const rungHeight = 45;
                 const maxPosition = Math.min(totalPlayers, 10);
-                const ladderHeight = (maxPosition - 1) * rungHeight;
-                const normalizedPosition = (maxPosition - position) / (maxPosition - 1);
-                const bottom = normalizedPosition * ladderHeight;
                 
-                climber.style.bottom = Math.max(0, bottom) + 'px';
-                podium.classList.remove('show');
+                if (maxPosition === 1) {
+                    // Single player case - same as first place
+                    climber.style.bottom = '420px';
+                    podium.classList.add('show');
+                } else {
+                    const ladderHeight = (maxPosition - 1) * rungHeight;
+                    const normalizedPosition = (maxPosition - position) / (maxPosition - 1);
+                    const bottom = normalizedPosition * ladderHeight;
+                    
+                    climber.style.bottom = Math.max(0, bottom) + 'px';
+                    podium.classList.remove('show');
+                }
             }
         }
         

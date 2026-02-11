@@ -966,8 +966,10 @@
     <div class="challenge-notification" id="challengeNotification"></div>
 
     <!-- Background Music -->
+    <!-- Note: Currently using Web Audio API to generate music dynamically.
+         This audio element is reserved for future file-based audio support.
+         Users can add custom music files by uncommenting the source tag below. -->
     <audio id="backgroundMusic" loop>
-        <!-- Users can add their own music file here -->
         <!-- <source src="path/to/calm-music.mp3" type="audio/mpeg"> -->
     </audio>
     
@@ -1032,9 +1034,10 @@
         const settingsGameBtn = document.getElementById('settingsGameBtn');
         const closeSettings = document.getElementById('closeSettings');
         
-        // Detect Linux OS
-        const isLinux = navigator.userAgent.toLowerCase().indexOf('linux') > -1 && 
-                        navigator.userAgent.toLowerCase().indexOf('android') === -1;
+        // Detect Linux OS (excluding Android)
+        const userAgentLower = navigator.userAgent.toLowerCase();
+        const isLinux = userAgentLower.indexOf('linux') > -1 && 
+                        userAgentLower.indexOf('android') === -1;
         
         // Customization data
         let customization = {
@@ -1119,7 +1122,9 @@
             oscillators.forEach(osc => {
                 try {
                     osc.stop();
-                } catch (e) {}
+                } catch (e) {
+                    // Oscillator may already be stopped - safe to ignore
+                }
             });
             oscillators = [];
             gainNodes = [];
@@ -1371,8 +1376,9 @@
                 year: 'numeric' 
             });
             
-            // Store previous position before updating
+            // Store previous position AND who was in first place before updating
             previousPosition = getCurrentPosition(leaderboard);
+            const previousFirstPlace = leaderboard.length > 0 ? leaderboard[0].username : null;
             
             // Check if there's already an entry for this user
             const userIndex = leaderboard.findIndex(entry => entry.username === username);
@@ -1412,11 +1418,10 @@
             }
             
             // Check for world record - user surpassed someone else to reach #1
-            const highestPlayer = leaderboard.length > 0 ? leaderboard[0].username : null;
-            const wasNotFirst = previousPosition !== 1;
             const isNowFirst = newPosition === 1;
+            const someoneElseWasFirst = previousFirstPlace && previousFirstPlace !== username;
             
-            if (isNowFirst && wasNotFirst && highestPlayer === username) {
+            if (isNowFirst && someoneElseWasFirst) {
                 showWorldRecord();
             }
         }

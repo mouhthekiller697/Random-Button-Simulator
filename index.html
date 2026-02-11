@@ -1059,23 +1059,15 @@
         let username = '';
         let previousPosition = -1;
         
-        // Background Music with Web Audio API
-        let audioContext = null;
+        // Background Music variables
         let musicPlaying = false;
         let oscillators = [];
         let gainNodes = [];
         
-        function initAudioContext() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            return audioContext;
-        }
-        
         function createCalmMusic() {
             if (musicPlaying) return;
             
-            const ctx = initAudioContext();
+            const ctx = getAudioContext();
             musicPlaying = true;
             
             // Create calm ambient music with gentle tones
@@ -1139,7 +1131,7 @@
                 musicToggle.textContent = '🔇';
                 musicToggle.title = 'Music Off - Click to Play';
             } else {
-                initAudioContext();
+                getAudioContext(); // Initialize audio context
                 createCalmMusic();
                 musicToggle.textContent = '🔊';
                 musicToggle.title = 'Music On - Click to Mute';
